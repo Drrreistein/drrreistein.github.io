@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发布链路自检 - 磊 的思考与写作</title>
+    <meta name="description" content="用于验证 md 到线上博客的整条发布链路，稍后会删除。">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Georgia:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="top-decoration">
+        <svg viewBox="0 0 2880 100" preserveAspectRatio="xMidYMid slice">
+            <defs>
+                <path id="wave1" d="M0,40 C150,80 350,0 500,40 C650,80 850,0 1000,40 C1150,80 1350,0 1500,40 C1650,80 1850,0 2000,40 C2150,80 2350,0 2500,40 C2650,80 2850,0 3000,40 L3000,0 L0,0 Z"/>
+                <path id="wave2" d="M0,60 C180,20 320,80 480,60 C640,40 820,90 980,60 C1140,30 1300,80 1460,60 C1620,40 1780,90 1940,60 C2100,30 2260,80 2420,60 C2580,40 2740,90 2900,60 L2900,0 L0,0 Z"/>
+                <path id="wave3" d="M0,80 C160,50 280,90 440,80 C600,70 760,95 920,80 C1080,65 1240,85 1400,80 C1560,70 1720,95 1880,80 C2040,65 2200,85 2360,80 C2520,70 2680,95 2840,80 L2840,0 L0,0 Z"/>
+            </defs>
+            <g class="wave-path-1"><use href="#wave1" fill="#991b1b" fill-opacity="0.8"/></g>
+            <g class="wave-path-2"><use href="#wave2" fill="#991b1b" fill-opacity="0.6"/></g>
+            <g class="wave-path-3"><use href="#wave3" fill="#b91c1c" fill-opacity="0.4"/></g>
+        </svg>
+    </div>
+
+    <header class="header">
+        <div class="header-content">
+            <div class="blog-identity">
+                <div class="avatar-container">
+                    <video autoplay muted loop playsinline class="avatar avatar-video">
+                        <source src="Bark.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <h1 class="blog-title">磊 的思考与写作</h1>
+            </div>
+            <nav class="navigation">
+                <a href="index.html#blog">blog</a>
+                <a href="reading-notes.html">reading notes</a>
+                <a href="podcast-notes.html">podcast notes</a>
+                <a href="projects.html">projects</a>
+                <a href="about.html">about</a>
+            </nav>
+            <button class="lang-switch" id="langSwitch">中文</button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <article class="article">
+            <h1 class="article-title article-title-full">发布链路自检</h1>
+            <p class="article-date">
+                <span class="date-text">写于 2026年11月05日</span>
+            </p>
+            <div class="article-body">
+<p>这是一篇临时文章，用来确认工具链是否可用。</p>
+<h2>检查项</h2>
+<ul>
+<li>渲染是否正常</li>
+<li>首页卡片是否插入</li>
+<li>GitHub Pages 是否更新</li>
+</ul>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="copyright">© 2026 磊。保留所有权利。</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
