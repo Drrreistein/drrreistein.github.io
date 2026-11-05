@@ -103,24 +103,23 @@
 
     <!-- 播客笔记主体区 -->
     <main class="main-content" id="podcast-notes">
-                    <div class="filter-bar" id="filter-bar">
-                <button class="filter-btn active" data-tag="all">全部</button>
-                    <button class="filter-btn" data-tag="AI">AI</button>
-                    <button class="filter-btn" data-tag="产品">产品</button>
-                    <button class="filter-btn" data-tag="健康">健康</button>
-                    <button class="filter-btn" data-tag="商业">商业</button>
-                    <button class="filter-btn" data-tag="成长">成长</button>
-                    <button class="filter-btn" data-tag="技术">技术</button>
-                    <button class="filter-btn" data-tag="文化">文化</button>
-                    <button class="filter-btn" data-tag="未来">未来</button>
-                    <button class="filter-btn" data-tag="科学">科学</button>
-                    <button class="filter-btn" data-tag="脑科学">脑科学</button>
-                    <button class="filter-btn" data-tag="设计">设计</button>
-            </div>
+        <h2 class="section-title" data-en="Podcast Notes" data-zh="阅读播客">Podcast Notes</h2>
+        <div class="filter-bar" id="filter-bar">
+            <button class="filter-btn active" data-tag="all">全部</button>
+            <button class="filter-btn" data-tag="AI">AI</button>
+            <button class="filter-btn" data-tag="产品">产品</button>
+            <button class="filter-btn" data-tag="健康">健康</button>
+            <button class="filter-btn" data-tag="商业">商业</button>
+            <button class="filter-btn" data-tag="成长">成长</button>
+            <button class="filter-btn" data-tag="技术">技术</button>
+            <button class="filter-btn" data-tag="文化">文化</button>
+            <button class="filter-btn" data-tag="未来">未来</button>
+            <button class="filter-btn" data-tag="科学">科学</button>
+            <button class="filter-btn" data-tag="脑科学">脑科学</button>
+            <button class="filter-btn" data-tag="设计">设计</button>
+        </div>
 
-                        
-
-            <div class="podcast-grid">
+        <div class="podcast-grid">
             <a href="podcast-articles/14个月增长190倍：我在Anthropic做增长的真实经历.html" class="podcast-card" data-tags="产品,商业,AI">
                 <img class="podcast-card-thumb" src="https://img.youtube.com/vi/k-H4nsOTuxU/maxresdefault.jpg" alt="" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/k-H4nsOTuxU/hqdefault.jpg'">
                 <div class="podcast-card-body">
@@ -486,32 +485,5 @@ Cat Wu是Anthropic Cloud Code和Co-work的产品负责人，与Boris（Bert Chan
 })();
 </script>
 
-<script>
-(function() {
-  var btns = document.querySelectorAll('.filter-btn');
-  var cards = document.querySelectorAll('.podcast-card');
-  btns.forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var tag = this.getAttribute('data-tag');
-      // 更新按钮状态
-      btns.forEach(function(b) { b.classList.remove('active'); });
-      this.classList.add('active');
-      // 筛选卡片
-      cards.forEach(function(card) {
-        if (tag === 'all') {
-          card.classList.remove('hidden');
-        } else {
-          var cardTags = (card.getAttribute('data-tags') || '').split(',');
-          if (cardTags.indexOf(tag) !== -1) {
-            card.classList.remove('hidden');
-          } else {
-            card.classList.add('hidden');
-          }
-        }
-      });
-    });
-  });
-})();
-</script>
 </body>
 </html>
