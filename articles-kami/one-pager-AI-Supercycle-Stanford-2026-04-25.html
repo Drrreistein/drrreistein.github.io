@@ -10,7 +10,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background-color: #f5f4ed;
-            color: #6b1d5e;
+            color: #8b1a1a;
             font-family: 'Noto Sans SC', sans-serif;
             font-size: 16px;
             line-height: 1.75;
@@ -21,65 +21,65 @@
         .page { max-width: 800px; margin: 0 auto; }
 
         /* HEADER */
-        .header { margin-bottom: 2.5rem; padding-bottom: 1.2rem; border-bottom: 2px solid #6b1d5e; }
-        .header .label { font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase; color: #7a6a9a; margin-bottom: 0.5rem; }
+        .header { margin-bottom: 2.5rem; padding-bottom: 1.2rem; border-bottom: 2px solid #8b1a1a; }
+        .header .label { font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase; color: #8a6a6a; margin-bottom: 0.5rem; }
         .header h1 { font-size: clamp(1.6rem, 4.5vw, 2.6rem); line-height: 1.2; margin-bottom: 0.4rem; }
-        .header .subtitle { font-size: 0.92rem; color: #4a3f6b; font-weight: 300; }
-        .header .meta { margin-top: 0.8rem; font-size: 0.8rem; color: #7a6a9a; display: flex; gap: 1.5rem; flex-wrap: wrap; }
+        .header .subtitle { font-size: 0.92rem; color: #5c2a2a; font-weight: 300; }
+        .header .meta { margin-top: 0.8rem; font-size: 0.8rem; color: #8a6a6a; display: flex; gap: 1.5rem; flex-wrap: wrap; }
         .header .meta span { display: flex; align-items: center; gap: 0.3rem; }
 
         /* THESIS */
-        .thesis { background: #6b1d5e; color: #f5f4ed; padding: 1.6rem 2rem; border-radius: 3px; margin-bottom: 2rem; }
+        .thesis { background: #8b1a1a; color: #f5f4ed; padding: 1.6rem 2rem; border-radius: 3px; margin-bottom: 2rem; }
         .thesis p { font-size: 1rem; line-height: 1.85; font-weight: 300; }
         .thesis strong { font-weight: 600; }
 
         /* STATS */
         .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.9rem; margin-bottom: 2rem; }
-        .stat-card { border: 1px solid #c8bfd8; border-top: 3px solid #6b1d5e; padding: 0.9rem 1.1rem; border-radius: 2px; }
-        .stat-card .number { font-size: 1.5rem; font-weight: 700; font-family: 'Noto Serif SC', serif; color: #6b1d5e; line-height: 1.2; }
-        .stat-card .desc { font-size: 0.76rem; color: #4a3f6b; margin-top: 0.2rem; }
+        .stat-card { border: 1px solid #d8c0c0; border-top: 3px solid #8b1a1a; padding: 0.9rem 1.1rem; border-radius: 2px; }
+        .stat-card .number { font-size: 1.5rem; font-weight: 700; font-family: 'Noto Serif SC', serif; color: #8b1a1a; line-height: 1.2; }
+        .stat-card .desc { font-size: 0.76rem; color: #5c2a2a; margin-top: 0.2rem; }
 
         /* SECTION HEADING */
-        h2 { font-size: 1.05rem; letter-spacing: 0.1em; margin: 2rem 0 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid #c8bfd8; color: #6b1d5e; }
+        h2 { font-size: 1.05rem; letter-spacing: 0.1em; margin: 2rem 0 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid #d8c0c0; color: #8b1a1a; }
 
         /* SECTION BLOCKS */
         .section { margin-bottom: 2rem; }
 
         /* TOPIC CARDS */
-        .topic-card { border: 1px solid #c8bfd8; padding: 1.1rem 1.4rem; border-radius: 2px; margin-bottom: 1rem; }
-        .topic-card .topic-title { font-weight: 600; font-size: 0.95rem; color: #6b1d5e; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.5rem; }
-        .topic-card .topic-title .num { background: #6b1d5e; color: #f5f4ed; font-size: 0.7rem; padding: 0.1rem 0.4rem; border-radius: 2px; font-weight: 400; }
-        .topic-card p, .topic-card li { font-size: 0.85rem; color: #4a3f6b; font-weight: 300; line-height: 1.7; }
+        .topic-card { border: 1px solid #d8c0c0; padding: 1.1rem 1.4rem; border-radius: 2px; margin-bottom: 1rem; }
+        .topic-card .topic-title { font-weight: 600; font-size: 0.95rem; color: #8b1a1a; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.5rem; }
+        .topic-card .topic-title .num { background: #8b1a1a; color: #f5f4ed; font-size: 0.7rem; padding: 0.1rem 0.4rem; border-radius: 2px; font-weight: 400; }
+        .topic-card p, .topic-card li { font-size: 0.85rem; color: #5c2a2a; font-weight: 300; line-height: 1.7; }
         .topic-card ul { list-style: none; padding: 0; }
         .topic-card li { padding: 0.2rem 0; border-bottom: 1px dashed rgba(200,191,216,0.5); }
         .topic-card li:last-child { border-bottom: none; }
-        .topic-card li::before { content: "· "; color: #7a6a9a; }
-        .topic-card .callout { background: rgba(27,54,93,0.06); border-left: 3px solid #6b1d5e; padding: 0.6rem 0.9rem; margin-top: 0.7rem; border-radius: 0 2px 2px 0; font-size: 0.84rem; color: #6b1d5e; font-style: italic; }
+        .topic-card li::before { content: "· "; color: #8a6a6a; }
+        .topic-card .callout { background: rgba(27,54,93,0.06); border-left: 3px solid #8b1a1a; padding: 0.6rem 0.9rem; margin-top: 0.7rem; border-radius: 0 2px 2px 0; font-size: 0.84rem; color: #8b1a1a; font-style: italic; }
 
         /* TABLE */
         table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.84rem; }
-        thead th { background: #6b1d5e; color: #f5f4ed; padding: 0.55rem 0.9rem; text-align: left; font-weight: 500; font-size: 0.8rem; }
-        tbody td { padding: 0.5rem 0.9rem; border-bottom: 1px solid #c8bfd8; color: #4a3f6b; vertical-align: top; }
+        thead th { background: #8b1a1a; color: #f5f4ed; padding: 0.55rem 0.9rem; text-align: left; font-weight: 500; font-size: 0.8rem; }
+        tbody td { padding: 0.5rem 0.9rem; border-bottom: 1px solid #d8c0c0; color: #5c2a2a; vertical-align: top; }
         tbody tr:nth-child(even) td { background: rgba(200,191,216,0.12); }
-        tbody td:first-child { font-weight: 600; color: #6b1d5e; white-space: nowrap; }
+        tbody td:first-child { font-weight: 600; color: #8b1a1a; white-space: nowrap; }
 
         /* QUOTES */
         .quotes { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; margin-bottom: 2rem; }
-        .quote-card { border: 1px solid #c8bfd8; padding: 1rem 1.2rem; border-radius: 2px; background: rgba(200,191,216,0.1); }
-        .quote-card blockquote { font-size: 0.88rem; color: #6b1d5e; line-height: 1.7; font-style: italic; font-family: 'Noto Serif SC', serif; }
-        .quote-card cite { display: block; font-size: 0.75rem; color: #7a6a9a; margin-top: 0.5rem; font-style: normal; }
+        .quote-card { border: 1px solid #d8c0c0; padding: 1rem 1.2rem; border-radius: 2px; background: rgba(200,191,216,0.1); }
+        .quote-card blockquote { font-size: 0.88rem; color: #8b1a1a; line-height: 1.7; font-style: italic; font-family: 'Noto Serif SC', serif; }
+        .quote-card cite { display: block; font-size: 0.75rem; color: #8a6a6a; margin-top: 0.5rem; font-style: normal; }
 
         /* TIMELINE */
         .timeline { margin-bottom: 1.5rem; }
         .tl-item { display: grid; grid-template-columns: 5rem 1fr; gap: 0 1rem; margin-bottom: 0.8rem; align-items: start; }
-        .tl-stage { font-family: 'Noto Serif SC', serif; font-size: 0.78rem; font-weight: 600; color: #7a6a9a; border-top: 2px solid #c8bfd8; padding-top: 0.3rem; }
-        .tl-body .tl-title { font-weight: 600; font-size: 0.9rem; color: #6b1d5e; margin-bottom: 0.15rem; }
-        .tl-body .tl-desc { font-size: 0.82rem; color: #4a3f6b; font-weight: 300; }
+        .tl-stage { font-family: 'Noto Serif SC', serif; font-size: 0.78rem; font-weight: 600; color: #8a6a6a; border-top: 2px solid #d8c0c0; padding-top: 0.3rem; }
+        .tl-body .tl-title { font-weight: 600; font-size: 0.9rem; color: #8b1a1a; margin-bottom: 0.15rem; }
+        .tl-body .tl-desc { font-size: 0.82rem; color: #5c2a2a; font-weight: 300; }
 
         /* WATCH LIST */
         .watch-list { list-style: none; padding: 0; margin-bottom: 2rem; }
-        .watch-list li { display: grid; grid-template-columns: 1fr auto; gap: 1rem; padding: 0.55rem 0; border-bottom: 1px dashed #c8bfd8; font-size: 0.85rem; color: #4a3f6b; }
-        .watch-list li strong { color: #6b1d5e; }
+        .watch-list li { display: grid; grid-template-columns: 1fr auto; gap: 1rem; padding: 0.55rem 0; border-bottom: 1px dashed #d8c0c0; font-size: 0.85rem; color: #5c2a2a; }
+        .watch-list li strong { color: #8b1a1a; }
         .watch-list li:last-child { border-bottom: none; }
     </style>
 </head>
