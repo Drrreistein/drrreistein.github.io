@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>心理学工具箱 · 四大场景 × 核心理论</title>
+<style>
+  :root{
+    --ink:#1a1a18; --ink-2:#3d3d3a; --ink-3:#6b6a64; --ink-4:#8f8e86;
+    --paper:#faf8f3; --card:#ffffff; --line:#e6e2d8; --line-2:#f0ece2;
+    --brand:#b91c1c; --brand-dark:#7f1d1d; --brand-soft:#fbe9e9;
+    --gold:#b8860b; --gold-soft:#f7f0dc;
+    --green:#2e7d5b; --green-soft:#e8f2ed;
+    --serif:"Songti SC","Noto Serif CJK SC",Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper); color:var(--ink); font-family:var(--sans);
+    font-size:16px; line-height:1.85; -webkit-font-smoothing:antialiased;
+  }
+  /* 进度条 */
+  #progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--brand);z-index:100;transition:width .1s linear}
+
+  /* 布局 */
+  .layout{display:flex;max-width:1360px;margin:0 auto;padding:0 28px}
+  .toc{
+    position:sticky;top:0;align-self:flex-start;width:250px;flex:0 0 250px;
+    max-height:100vh;overflow:auto;padding:88px 22px 60px 0;font-size:13.5px;
+  }
+  .toc-title{font-size:11px;letter-spacing:2px;color:var(--ink-4);text-transform:uppercase;margin-bottom:14px}
+  .toc a{display:block;color:var(--ink-3);text-decoration:none;padding:4px 0 4px 10px;border-left:2px solid transparent;transition:.15s}
+  .toc a:hover{color:var(--brand)}
+  .toc a.on{color:var(--brand-dark);border-left-color:var(--brand);font-weight:600}
+  .toc .grp{margin:16px 0 6px;font-size:12px;color:var(--ink-4);letter-spacing:.5px}
+  main{flex:1;min-width:0;padding:74px 0 120px;max-width:860px}
+
+  /* 封面 */
+  .hero{border-bottom:1px solid var(--line);padding-bottom:38px;margin-bottom:46px}
+  .kicker{font-size:12px;letter-spacing:3px;color:var(--brand);font-weight:600;margin-bottom:16px}
+  h1{font-family:var(--serif);font-size:46px;line-height:1.25;letter-spacing:-.5px;margin-bottom:16px}
+  .lead{font-size:17px;color:var(--ink-2);line-height:1.9;max-width:680px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .chip{font-size:12.5px;padding:5px 12px;border:1px solid var(--line);border-radius:999px;color:var(--ink-3);background:var(--card)}
+
+  /* 章节 */
+  section{margin-bottom:72px;scroll-margin-top:24px}
+  .sec-head{display:flex;gap:18px;align-items:flex-start;padding:20px 0 16px;border-top:3px solid var(--brand);margin-bottom:26px}
+  .sec-no{font-family:var(--serif);font-size:44px;line-height:1;color:var(--brand-soft);-webkit-text-stroke:1px var(--brand);font-weight:700}
+  .sec-t{font-family:var(--serif);font-size:27px;line-height:1.35}
+  .sec-sub{font-size:14px;color:var(--ink-3);margin-top:4px}
+
+  /* 分支卡 */
+  .branch{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:26px 28px;margin-bottom:20px;border-left:3px solid var(--brand)}
+  .branch h3{font-family:var(--serif);font-size:21px;margin-bottom:4px}
+  .branch .essence{font-size:14.5px;color:var(--ink-3);margin-bottom:20px;padding-bottom:16px;border-bottom:1px dashed var(--line)}
+  .branch .essence b{color:var(--brand-dark)}
+
+  /* 理论条目 */
+  .theory{margin:22px 0}
+  .theory:first-of-type{margin-top:6px}
+  .t-name{font-size:16.5px;font-weight:600;color:var(--ink);display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .t-en{font-size:12px;color:var(--ink-4);font-weight:400;letter-spacing:.3px}
+  .t-body{margin-top:8px}
+  .row{display:flex;gap:12px;margin:7px 0;font-size:14.8px;line-height:1.85}
+  .tag{
+    flex:0 0 auto;font-size:11.5px;font-weight:600;padding:2px 7px;border-radius:4px;
+    height:22px;line-height:18px;margin-top:5px;letter-spacing:.5px;
+  }
+  .tag.what{background:var(--brand-soft);color:var(--brand-dark)}
+  .tag.why{background:var(--gold-soft);color:#8a6a0a}
+  .tag.how{background:var(--green-soft);color:var(--green)}
+
+  /* 表格 */
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;background:var(--card)}
+  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;line-height:1.7}
+  th{background:#f7f4ec;font-weight:600;font-size:13px;color:var(--ink-2);white-space:nowrap}
+  tbody tr:nth-child(even){background:#fcfbf7}
+  td code{background:#f3f0e8;padding:1px 5px;border-radius:3px;font-size:12.5px}
+
+  /* 引用块 */
+  blockquote{
+    margin:18px 0;padding:14px 18px;background:#f7f4ec;border-left:3px solid var(--gold);
+    font-size:14.5px;color:var(--ink-2);border-radius:0 6px 6px 0;
+  }
+  blockquote b{color:var(--ink)}
+
+  /* 提示条 */
+  .callout{margin:18px 0;padding:14px 18px;border-radius:8px;font-size:14px;line-height:1.85;border:1px solid}
+  .callout.warn{background:#fdf6f6;border-color:#f3d9d9;color:#7a2a2a}
+  .callout.info{background:#f6f8fb;border-color:#dde5ef;color:#2f4256}
+
+  /* 速查表 */
+  .cheat th{background:var(--brand-dark);color:#fff;border-color:var(--brand-dark)}
+  .cheat td:first-child{font-weight:600;white-space:nowrap}
+
+  ul,ol{margin:10px 0 10px 22px}
+  li{margin:5px 0;font-size:14.8px}
+
+  .end{margin-top:60px;padding-top:26px;border-top:1px solid var(--line);font-size:13.5px;color:var(--ink-4);line-height:1.9}
+
+  @media (max-width:1080px){
+    .toc{display:none}
+    .layout{padding:0 20px}
+    main{max-width:none;padding-top:44px}
+    h1{font-size:34px}
+    .branch{padding:22px 20px}
+    .sec-t{font-size:23px}
+  }
+  @media print{
+    #progress,.toc{display:none}
+    body{background:#fff;font-size:11pt}
+    section{page-break-inside:auto}
+    .branch{page-break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<div class="layout">
+  <nav class="toc" id="toc">
+    <div class="toc-title">目录</div>
+    <a href="#intro">写在前面</a>
+    <div class="grp">一 · 投资与商业决策</div>
+    <a href="#s1">给决策系统打补丁</a>
+    <a href="#s1-1">行为金融学</a>
+    <a href="#s1-2">判断与决策心理学</a>
+    <a href="#s1-3">工业与组织心理学</a>
+    <div class="grp">二 · 创业与团队管理</div>
+    <a href="#s2">理解人、驱动人</a>
+    <a href="#s2-1">组织行为学</a>
+    <a href="#s2-2">社会心理学</a>
+    <a href="#s2-3">谈判心理学</a>
+    <div class="grp">三 · 家庭教育</div>
+    <a href="#s3">懂规律，少内耗</a>
+    <a href="#s3-1">发展心理学</a>
+    <a href="#s3-2">健康心理学（儿童慢病）</a>
+    <a href="#s3-3">积极心理学</a>
+    <div class="grp">四 · 个人成长与身心健康</div>
+    <a href="#s4">管理压力，不透支</a>
+    <a href="#s4-1">健康心理学 / 心身医学</a>
+    <a href="#s4-2">认知行为疗法</a>
+    <a href="#s4-3">认知心理学</a>
+    <a href="#s4-4">压力与应对</a>
+    <div class="grp">收束</div>
+    <a href="#cheat">一页速查表</a>
+    <a href="#howto">怎么用这份东西</a>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <div class="kicker">心理学工具箱</div>
+      <h1>四个场景，一把工具箱</h1>
+      <p class="lead">
+        硬科技投研与创业、多子女家庭教育、个人职业转型、身心健康 —— 这四个战场看起来无关，但底层打的是同一场仗：
+        <b>人如何在信息不完备、资源有限、情绪干扰的情况下做出更好的判断。</b>
+        这份文档把每个场景最刚需的心理学分支拆成三层：它是什么、为什么有用、你怎么用。
+      </p>
+      <div class="chips">
+        <span class="chip">行为金融</span><span class="chip">双系统</span><span class="chip">大五人格</span>
+        <span class="chip">自我决定理论</span><span class="chip">群体极化</span><span class="chip">谈判</span>
+        <span class="chip">埃里克森八阶段</span><span class="chip">成长型思维</span><span class="chip">HPA 轴</span>
+        <span class="chip">CBT</span><span class="chip">认知负荷</span><span class="chip">资源保存理论</span>
+      </div>
+    </div>
+
+    <section id="intro">
+      <div class="sec-head">
+        <div class="sec-no">00</div>
+        <div>
+          <div class="sec-t">写在前面：心理学不是知识收藏，是可调用工具</div>
+          <div class="sec-sub">读之前先接受三个前提</div>
+        </div>
+      </div>
+      <ul>
+        <li><b>每个理论都有一个「适用边界」。</b>行为金融解释的是群体统计规律，不能直接推到你面前这一个人；大五人格描述倾向，不预测单次行为。把工具用在边界内，它才有效。</li>
+        <li><b>理论的价值在于改变动作，不在于增加词汇。</b>知道「确认偏误」不算本事，写一份反方备忘录才算。本文每个理论都尽量落到一个具体动作上。</li>
+        <li><b>先选 1–2 个用起来，别一次全上。</b>同时装 25 个工具的结果是一个都不用。文末有一页速查表，按你当下最痛的那个场景挑。</li>
+      </ul>
+      <div class="callout info">
+        <b>阅读方式：</b>每一条理论都按「是什么 / 为什么有用 / 怎么用」三段排列。赶时间可以只看<b>怎么用</b>，但要理解为什么，最好三段连着读 —— 只记动作会变成新的教条。
+      </div>
+    </section>
+
+    <!-- ══════════════════════════ 一 ══════════════════════════ -->
+    <section id="s1">
+      <div class="sec-head">
+        <div class="sec-no">01</div>
+        <div>
+          <div class="sec-t">投资与商业决策</div>
+          <div class="sec-sub">给大脑的决策系统「打补丁」—— 怎么更理性地判断项目、识人、下注</div>
+        </div>
+      </div>
+
+      <div class="branch" id="s1-1">
+        <h3>1.1　行为金融学 / 行为经济学</h3>
+        <div class="essence">
+          <b>核心本质：</b>研究人在经济决策中<b>系统性</b>的认知偏差 —— 不是你不理性，是大脑出厂设置里就带着一批「快捷但失真」的默认算法。关键是这些错误是<b>可预测</b>的，所以可以被流程对冲。
+        </div>
+
+        <div class="theory">
+          <div class="t-name">损失厌恶 <span class="t-en">Loss Aversion · Kahneman &amp; Tversky, 1979</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>同等金额下，损失带来的痛苦约为收益带来的快乐的两倍（系数约 2–2.5）。人不是「追求收益最大化」，而是「避免损失最小化」。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>它直接制造了投资里最贵的两个动作：<b>处置效应</b>（赚一点就跑、亏很多却死扛）与<b>沉没成本谬误</b>（因为已经投了钱，所以不肯承认判断错了）。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>把止损写成<b>事先的规则</b>而不是当下的心情：投前就定好「什么条件下我承认判断错误」，并把它变成书面条款。对已投项目，问自己一句：如果今天是我第一次看到它、且没有持仓，我还会投吗？</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">锚定效应 <span class="t-en">Anchoring</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>最先接触到的数字会成为后续判断的参照点，即使它和真实价值无关。上一轮估值、同行的报价、创始人报的数，都会变成锚。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>硬科技投资里最隐蔽的锚不是估值，是<b>标签</b>：大厂背景、名校博士、明星机构领投。标签一旦形成锚，你会自动替对方解释所有疑点。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>估值前先独立测算一遍，<b>写下来再去看对方报价</b>；见创始人前先写三条「我需要被说服的证据」，见面后再回看是否被标签带走。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">确认偏误 <span class="t-en">Confirmation Bias</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>人会主动搜索、记住、放大支持自己已有判断的信息，忽略或贬低相反证据。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>技术背景转投研的人风险最高：你越懂技术，越容易只验证「技术路线成不成立」，而跳过「这东西有没有人买、团队能不能交付、钱能撑多久」。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>三件固定动作：<b>（1）预演失败</b>——投前写「如果三年后这笔投资归零，最可能的原因是什么」；<b>（2）红队</b>——指定一个人专门找反证，且不许他说好话；<b>（3）反方备忘录</b>——把最强的反对意见写成半页纸，放进决策档案。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">幸存者偏差 <span class="t-en">Survivorship Bias</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>你看到的样本已经被「成功」筛选过一遍，失败者不在视野里，于是你高估了成功率、误判了成功原因。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>案例研究最有欺骗性：读十个成功案例总结出的「共性」，可能在一百个失败项目里同样存在。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>做赛道研究时，<b>刻意去找「死掉的同类」</b>：同一年成立、同一技术路线、后来消失的公司，问它们死于什么。这个名单比成功案例名单更有信息量。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">基础比率谬误 <span class="t-en">Base Rate Neglect</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>面对具体个案时，人会忽略总体概率，被个案细节说服。哪怕个案特征再鲜明，也该先看基准发生率。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>早期硬科技项目本身就是低基础比率的游戏。如果某类项目五年存活率是 8%，那么「这个团队特别优秀」能把它抬到 15%，但抬不到 60%。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>先写赛道基准（这一阶段、这一类项目的存活率与回报分布），再叠加个体优势，<b>顺序不能反</b>。用「基准 × 调整系数」而不是「直觉 × 好感」。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">过度自信 <span class="t-en">Overconfidence</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>对自己判断准确度的高估，且<b>越专业越严重</b>（专家在自己领域内容易过度自信）。表现为区间估计过窄、笃定感过强。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>过度自信不体现在「我觉得我对」，而体现在「我不给出不确定性范围」。一旦不给范围，就无法校准。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>做<b>校准训练</b>：每个判断都写成概率（「我认为这个项目有 30% 概率跑出来」），记在本子上，一年后回看实际结果。三个月就能看出自己系统性偏高还是偏低。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">峰终定律 <span class="t-en">Peak-End Rule</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>人对一段经历的记忆，主要由「情绪最强的那一刻」和「结束时的感受」决定，而不是平均体验。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>它决定了你的判断会被谁记住：与 LP、合伙人、被投企业的沟通，别人记住的是你情绪最浓的一句话和最后一次接触。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>重要沟通设计一个明确的「收尾」：结论先行、最后一句给确定性。复盘会不要以追责结尾，要以「下一次怎么做」结尾 —— 否则团队记住的只有恐惧。</span></div>
+          </div>
+        </div>
+
+        <div class="callout info">
+          <b>一页清单（投前）</b>：① 赛道基础比率是多少 ② 我有没有写反方备忘录 ③ 我的估值锚从哪来 ④ 如果归零，最可能的原因是什么 ⑤ 我给的概率是多少，敢记录吗。
+        </div>
+      </div>
+
+      <div class="branch" id="s1-2">
+        <h3>1.2　判断与决策心理学（JDM）</h3>
+        <div class="essence">
+          <b>核心本质：</b>研究人类决策的底层认知机制。最经典的是卡尼曼的<b>双系统理论</b>：人有两个思考系统，一个快、省力、直觉；一个慢、费力、需要集中注意力。
+        </div>
+
+        <div class="theory">
+          <div class="t-name">双系统理论 <span class="t-en">Dual-Process Theory · Kahneman, 2011</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>系统 1 自动、快速、联想式、几乎不耗能；系统 2 受控、缓慢、需要工作记忆、容易疲劳。日常 90% 以上的判断由系统 1 完成，系统 2 只在被唤醒时介入。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>所有偏差几乎都是「系统 1 抢跑、系统 2 缺席」。你不是不会算，是没被提醒去算。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>给两个系统<b>明确分工</b>：系统 1 负责「这条路看起来对不对、这个人感觉靠不靠谱」的第一反应；系统 2 负责「尽调、估值、情景推演、反向验证」。规定：任何超过某个金额的决策，必须留下系统 2 的书面痕迹（哪怕一页纸）。</span></div>
+          </div>
+          <table>
+            <thead><tr><th>维度</th><th>系统 1（快思考）</th><th>系统 2（慢思考）</th></tr></thead>
+            <tbody>
+              <tr><td>工程类比</td><td>小核：低功耗、响应快、精度差</td><td>大核：算力强、精度高、功耗大易累</td></tr>
+              <tr><td>典型场景</td><td>技术路线第一眼判断、识人直觉、路演现场反应</td><td>尽调、财务测算、竞争格局推演、条款设计</td></tr>
+              <tr><td>失效方式</td><td>被锚定、被标签带走、以偏概全</td><td>疲劳后放弃思考、用「算过了」的名义自我说服</td></tr>
+              <tr><td>使用纪律</td><td>允许它出结论，但只能作为<b>假设</b></td><td>负责把假设变成<b>证据</b>，或推翻它</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">可得性启发 <span class="t-en">Availability Heuristic</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>越容易想起的事，被认为越常发生。最近看过的一篇爆款文章、刚聊过的一个失败案例，会扭曲你对概率的感觉。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>判断「这个风险常不常见」时，先问「我最近是不是刚好被什么信息轰炸过」。用数据表替代记忆。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">代表性启发 <span class="t-en">Representativeness Heuristic</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>用「像不像典型样本」来判断概率，而忽略基础比率。一个团队「看起来就很像成功的团队」，于是你默认它会成功。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>把「像」和「会」分开写：像成功的特征有哪些（定性），支撑成功的硬条件有哪些（订单、现金流、良率、客户复购）。只有后者能进入决策。</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="branch" id="s1-3">
+        <h3>1.3　工业与组织心理学（I-O）· 人才测评</h3>
+        <div class="essence">
+          <b>核心本质：</b>用可测量的维度替代「凭感觉识人」。核心工具是<b>大五人格（OCEAN）</b>—— 相当于人才的「参数跑分模型」，也是目前跨文化效度最稳的人格框架。
+        </div>
+
+        <table>
+          <thead><tr><th>维度</th><th>高分特征</th><th>低分特征</th><th>硬科技创业中的意义</th></tr></thead>
+          <tbody>
+            <tr><td><b>O</b> 开放性</td><td>好奇、接受新范式、愿意试错</td><td>务实、守成、偏好成熟方案</td><td>决定能否做出「非共识但正确」的技术选择</td></tr>
+            <tr><td><b>C</b> 尽责性</td><td>有条理、守承诺、能扛长周期</td><td>随性、易变、拖延</td><td><b>工作绩效最强的单一预测因子</b>；硬科技周期长，这一项权重最高</td></tr>
+            <tr><td><b>E</b> 外倾性</td><td>主动、善表达、能从社交恢复能量</td><td>内敛、深度思考、社交耗能</td><td>决定融资、BD、招人时是否撑得住前台</td></tr>
+            <tr><td><b>A</b> 宜人性</td><td>合作、体谅、避免冲突</td><td>强势、直接、敢拍桌</td><td>低宜人性在「必须砍人、必须拒绝客户」时是优势，但会伤团队</td></tr>
+            <tr><td><b>N</b> 情绪稳定性</td><td>抗压、情绪回弹快</td><td>易焦虑、易被负面放大</td><td><b>逆境下的心态</b>，直接决定创业公司能否熬过死亡谷</td></tr>
+          </tbody>
+        </table>
+
+        <div class="theory">
+          <div class="t-name">用测评替代直觉的三个原则</div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>结构化面试（同一组问题、同一套评分维度）、工作样本测试（让对方真做一件你关心的事）、多评估者交叉。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>非结构化面试的预测效度很低（接近随机），而结构化面试 + 工作样本的效度显著更高。这不是学术洁癖，是省时间。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>尽调创始人时，别问「你怎么看行业」，给一个真实场景让他当场推演（<b>工作样本</b>）；再分别问 3 个前同事同一个问题（<b>多评估者</b>）；最后按 O/C/N 三项打分，其余两项只做参考。</span></div>
+          </div>
+        </div>
+
+        <blockquote>
+          <b>一句提醒：</b>大五人格描述的是「倾向」，不是「命运」。一个人在压力下的行为，还取决于环境、激励和当下的资源。测评用来提问，不用来定罪。
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════ 二 ══════════════════════════ -->
+    <section id="s2">
+      <div class="sec-head">
+        <div class="sec-no">02</div>
+        <div>
+          <div class="sec-t">创业与团队管理</div>
+          <div class="sec-sub">理解人、驱动人、降低内耗 —— 怎么激励、怎么避免集体犯错、怎么谈</div>
+        </div>
+      </div>
+
+      <div class="branch" id="s2-1">
+        <h3>2.1　组织行为学（OB）</h3>
+        <div class="essence">
+          <b>核心本质：</b>组织里人的行为规律，相当于团队的「运行架构设计指南」。你设计的不是制度，是<b>人会怎么反应</b>。
+        </div>
+
+        <div class="theory">
+          <div class="t-name">自我决定理论 <span class="t-en">Self-Determination Theory · Deci &amp; Ryan</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>人有三种基本心理需求：<b>自主</b>（我的行为是我选的）、<b>胜任</b>（我能把它做好）、<b>关联</b>（我和这群人有连接）。三者被满足，内在动机才成立；被破坏，外在奖励也补不回来。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>早期技术人才对「被安排」极其敏感。加薪能解决不满，但解决不了「我为什么要在这干」。而且外在奖励过度使用会<b>挤出</b>内在动机（给钱反而让事情变成交易）。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>三件低成本动作：<b>自主</b>——把「做什么」定清楚，「怎么做」交出去；<b>胜任</b>——给略高于当前能力的任务 + 及时反馈；<b>关联</b>——让人知道他的模块在整体里为什么重要。这比画饼有效，也比涨薪便宜。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">目标设置理论 <span class="t-en">Goal-Setting Theory · Locke &amp; Latham</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>具体、有一定难度、且有反馈的目标，比「好好干」显著提升绩效。三个条件缺一不可：<b>明确</b>（可判断是否达成）、<b>有挑战</b>（约 60–70% 把握）、<b>有反馈</b>（知道进展）。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>模糊目标是内耗的源头：每个人对「好」的定义不同，最后谁都不满意。这也是 OKR 的底层逻辑 —— O 给方向，KR 给可验证的判据。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>把「把产品做好」翻译成「Q1 完成 3 家标杆客户的 POC，其中 2 家进入采购流程」。目标一旦可验证，管理成本会骤降；同时要留出<b>过程反馈</b>（每周 15 分钟看进展），否则目标会变成期末审判。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">心理安全感 <span class="t-en">Psychological Safety · Edmondson</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>团队成员相信「在这里说真话、承认错误、提出异议，不会被羞辱或惩罚」。注意它不等于「对人nice」，而是「对真相安全」。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>没有心理安全感，你得到的信息全是过滤过的。创始人最后一个知道问题，是组织失败的常见起点。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>创始人先示范<b>承认自己不知道</b>：在会上公开说「这件事我判断错了，原因是……」。一次高质量的自我纠错，比十次「大家畅所欲言」有效。</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="branch" id="s2-2">
+        <h3>2.2　社会心理学</h3>
+        <div class="essence">
+          <b>核心本质：</b>人在群体中的行为规律 —— 群体不是个体的简单加总，它会放大某些倾向、抑制另一些倾向。相当于「群体系统的交互 bug 说明书」。
+        </div>
+
+        <div class="theory">
+          <div class="t-name">群体极化 <span class="t-en">Group Polarization</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>一群观点相近的人讨论后，立场会变得更极端，而不是更中庸。讨论本身会强化原有倾向。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>早期创业团队最容易「抱团乐观」：每个人都真心相信，于是没人负责说「这可能不行」。会议越长，共识越强，风险越大。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>三个机制：<b>（1）先写后说</b>——会前各自书面提交判断，避免第一个发言定调；<b>（2）指定魔鬼代言人</b>——轮流担任，任务是把方案驳倒，且这被视为贡献；<b>（3）设置「反对票配额」</b>——重大决策必须至少有一条被认真记录的反对意见。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">从众效应 <span class="t-en">Conformity · Asch</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>面对明显的群体一致意见，个体倾向于放弃自己的判断，哪怕他知道答案是错的。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>别在群里做重大判断。一对一先问，再开会 —— 一对一时人更容易说真话，会议只是汇总与决策。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">社会认同理论 <span class="t-en">Social Identity Theory · Tajfel</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>人的自我概念有一部分来自「我属于哪个群体」，并会自动偏袒内群体、贬低外群体。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>部门墙、老员工 vs 新员工、技术派 vs 产品派，本质都是社会认同在起作用，而不是谁对谁错。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>制造<b>更大粒度的共同身份</b>（「我们是在做同一件事的人」），并让不同群体共同完成一个必须协作的目标。跨部门冲突靠讲道理解决不了，靠共同任务可以。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">认知失调 <span class="t-en">Cognitive Dissonance · Festinger</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>当行为和态度不一致时，人会感到不适，并倾向于<b>改变态度来合理化行为</b>，而不是改变行为。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>摸鱼的人会慢慢觉得「公司本来就不行」；投入很多的项目负责人会越来越坚信项目值得做。这是自我保护，不是品德问题。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>看到「态度突然转向负面」时，先找行为层面的原因（是不是被边缘化了、是不是承诺没兑现）。修复行为比纠正态度有效。同时警惕自己：投入越多，越难承认判断错误 —— 这正是沉没成本的心理学根源。</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="branch" id="s2-3">
+        <h3>2.3　谈判心理学</h3>
+        <div class="essence">
+          <b>核心本质：</b>谈判不是口才比赛，是<b>信息 + 框架 + 筹码</b>的结构博弈。心理学在这里的作用是：让你看见对方（和自己）正在被什么影响。
+        </div>
+
+        <div class="theory">
+          <div class="t-name">锚定 + 首次报价</div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>第一个出现的数字会成为后续谈判的参照中心。先出价的一方通常占据锚定优势，前提是锚得有依据。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>融资/并购中，先给出<b>有逻辑支撑</b>的区间（对标交易 + 增长假设），而不是一个孤立数字。没有依据的锚会被对方轻易推翻，反而暴露底牌。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">互惠原则 <span class="t-en">Reciprocity · Cialdini</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>接受他人好处后会产生回报义务感，且这种义务感往往大于所得本身。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>在提出核心诉求前，先给出真实、无条件的让步（提前释放信息、介绍资源、放宽一个非关键条款）。<b>顺序很重要</b>：先给再要，不是边给边要。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">承诺升级 <span class="t-en">Escalation of Commitment</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>已经投入越多，越倾向于继续投入以证明之前没错 —— 即使理性上应该止损。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>谈判/投资前设定<b>明确的退出条件与预算上限</b>，并由不参与谈判的人保管。当局者迷不是意志问题，是结构问题。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">框架效应 <span class="t-en">Framing Effect</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>同一件事换一种表述，人的选择会改变。「成功率 70%」和「失败率 30%」在数学上等价，心理上不等价。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>表达自己方案时用<b>收益框架</b>（能得到什么），评价对方方案时用<b>损失框架</b>反问（不做会失去什么）。同时警惕自己被框架带走 —— 重要决策强制用两种框架各写一遍。</span></div>
+          </div>
+        </div>
+
+        <div class="callout info">
+          <b>加一条底层工具：BATNA</b>（最佳替代方案，Fisher &amp; Ury）。谈判前先算清楚「谈不成我能怎么办」，这个方案决定了你的底线和底气。没有 BATNA 的谈判，本质是请求。
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════ 三 ══════════════════════════ -->
+    <section id="s3">
+      <div class="sec-head">
+        <div class="sec-no">03</div>
+        <div>
+          <div class="sec-t">家庭教育与亲子沟通</div>
+          <div class="sec-sub">懂规律，减少情绪内耗 —— 理解行为背后的原因，而不是纠正表面</div>
+        </div>
+      </div>
+
+      <div class="branch" id="s3-1">
+        <h3>3.1　发展心理学</h3>
+        <div class="essence">
+          <b>核心本质：</b>人从出生到老年的心理发展有阶段性任务。每个年龄段有它必须解决的矛盾，解决了就往前走，没解决就带着它走。相当于「人的成长版本迭代说明」。
+        </div>
+
+        <div class="theory">
+          <div class="t-name">埃里克森人格发展八阶段 <span class="t-en">Erikson's Stages</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>人的一生被分为八个阶段，每阶段有一对核心矛盾。矛盾的处理方式，会沉淀为人格底色。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>用来判断「这个行为是问题，还是阶段」。大量被当成「问题」的行为，其实是正常发展任务的外显。</span></div>
+          </div>
+          <table>
+            <thead><tr><th>阶段</th><th>核心矛盾</th><th>顺利发展出的品质</th><th>家长的可为之处</th></tr></thead>
+            <tbody>
+              <tr><td>0–1.5 岁</td><td>信任 vs 不信任</td><td>安全感、希望</td><td>及时、稳定的回应</td></tr>
+              <tr><td>1.5–3 岁</td><td>自主 vs 羞怯怀疑</td><td>意志力</td><td>允许他自己做，容忍慢和乱</td></tr>
+              <tr><td>3–6 岁</td><td>主动 vs 内疚</td><td>目的感</td><td>鼓励尝试，不嘲笑「幼稚」的想法</td></tr>
+              <tr><td>6–12 岁</td><td>勤奋 vs 自卑</td><td>胜任感</td><td>让他体验「努力 → 做成了」</td></tr>
+              <tr><td><b>12–18 岁</b></td><td><b>自我同一性 vs 角色混乱</b></td><td><b>忠诚、自我认同</b></td><td><b>给探索空间，不做价值审判</b></td></tr>
+              <tr><td>18–40 岁</td><td>亲密 vs 孤独</td><td>爱</td><td>——</td></tr>
+              <tr><td>40–65 岁</td><td>繁衍 vs 停滞</td><td>关怀</td><td>——</td></tr>
+              <tr><td>65 岁以上</td><td>自我整合 vs 绝望</td><td>智慧</td><td>——</td></tr>
+            </tbody>
+          </table>
+          <blockquote>
+            <b>关键洞察：</b>青春期的「叛逆」本质是孩子在回答「我是谁」。他不是在对抗你，他是在用对抗来确认边界。你越把它当成挑衅，越会把「探索」打成「战争」。角色从<b>管控者</b>转向<b>支持者</b>，冲突会下降一个量级。
+          </blockquote>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">自主支持 vs 心理控制</div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span><b>自主支持</b>：提供选择、解释理由、承认他的感受。<b>心理控制</b>：用内疚、撤回关爱、否定感受来驱动（「我这么辛苦都是为了你」）。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>大量研究发现，心理控制与青少年焦虑、低自我价值显著相关；而自主支持与学业投入、心理健康正相关。两者外观都像「管孩子」，效果完全相反。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>把命令句改成选择句：「现在去写作业」→「你想先写数学还是先写英语，8 点半前完成就行」。选择必须是真实的，否则是伪自主，孩子一眼看穿。</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="branch" id="s3-2">
+        <h3>3.2　健康心理学（儿童慢病方向）</h3>
+        <div class="essence">
+          <b>核心本质：</b>心理状态会影响疾病的康复与自我管理。对慢性病儿童来说，最大的敌人往往不是疾病本身，而是「长期治疗带来的心理耗竭」。
+        </div>
+
+        <div class="theory">
+          <div class="t-name">依从性 vs 自我管理</div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span><b>依从性</b>是「听医生的话」，<b>自我管理</b>是「我参与管理我的身体」。前者是外部驱动，后者是内部驱动。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>慢性病需要长期坚持，靠外部督促必然衰减。孩子抵触康复训练，往往不是懒，是<b>长期疾病带来的心理耗竭</b> + 缺乏掌控感。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>把「被要求做」变成「我参与决定」：一起看康复计划、让他选训练顺序、记录自己的进步曲线。掌控感是慢性病儿童最重要的心理资源之一。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">生物心理社会模型 + 疼痛的门控</div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>疼痛和不适不只由组织损伤决定，还受注意力、情绪、预期调节（「门控」可以被打得更开或关得更紧）。焦虑会放大疼痛，专注与放松会减弱它。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>在不适来临时做三件事：<b>转移注意</b>（有吸引力的活动，而非「别想了」）、<b>放慢呼吸</b>（延长呼气）、<b>重新解释</b>（「这是身体在修复，不是又坏了」）。这些是可教给孩子的具体技能。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">家长的两种失衡：过度保护 vs 过度要求</div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>过度保护会传递「你不行」的暗示，削弱自我效能；过度要求会传递「你还不够好」，制造挫败。中间那条线是<b>适度挑战 + 兜底支持</b>。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>给任务时问自己：这件事他踮脚能不能做到？能，就让他做，你只负责在失败时接住他，而不是替他做。</span></div>
+          </div>
+        </div>
+
+        <div class="callout warn">
+          <b>边界提醒：</b>健康心理学是辅助理解与配合治疗，<b>不替代医疗判断</b>。涉及用药、康复方案、疼痛性质的变化，以主诊医生意见为准。
+        </div>
+      </div>
+
+      <div class="branch" id="s3-3">
+        <h3>3.3　积极心理学（成长型思维方向）</h3>
+        <div class="essence">
+          <b>核心本质：</b>不是心灵鸡汤，是研究人的优势、韧性与幸福感的实证科学。它关心的不是「怎么让人不难受」，而是「什么条件让人长得更好」。
+        </div>
+
+        <div class="theory">
+          <div class="t-name">成长型思维 <span class="t-en">Growth Mindset · Carol Dweck</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>固定型思维认为能力是常量（「我就是不擅长数学」）；成长型思维认为能力可通过策略与努力发展（「我还没找到方法」）。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>两种思维在遇到困难时分岔：固定型把失败解释为「证明我不行」，于是回避挑战；成长型把失败解释为「信息」，于是继续尝试。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>三个动作：<b>（1）夸过程不夸天赋</b>——「你今天试了三种解法」而不是「你真聪明」；<b>（2）加一个「还」字</b>——「我不会」→「我还没学会」；<b>（3）把错误当数据</b>——考砸后只讨论「哪一步的策略出了问题」，不评价人。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">心理韧性 <span class="t-en">Resilience</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>在逆境中维持功能、并恢复的能力。它不是「扛住不哭」，而是「跌倒后有资源把自己拉起来」。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>韧性不是天生特质，而是一组可培养的保护因子：至少一个稳定的支持性关系、可控感、意义感、以及「我能影响结果」的信念。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>对慢病孩子，最有效的不是鼓励「你要坚强」，而是帮他积累<b>「我做到过」的具体记忆</b>：康复训练的小里程碑、他自己完成的一件事。韧性的原料是成功经验，不是口号。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">PERMA 模型 <span class="t-en">Seligman</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>幸福由五个可操作的部分组成：<b>P</b> 积极情绪、<b>E</b> 投入（心流）、<b>R</b> 关系、<b>M</b> 意义、<b>A</b> 成就。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>当孩子状态低迷时，不要笼统问「你怎么了」，而是分五项排查：最近有没有让他投入的事？关系上是否孤立？哪一项被抽掉了，就从哪一项补。</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════ 四 ══════════════════════════ -->
+    <section id="s4">
+      <div class="sec-head">
+        <div class="sec-no">04</div>
+        <div>
+          <div class="sec-t">个人成长与身心健康</div>
+          <div class="sec-sub">科学管理压力，避免身心透支 —— 转型期最需要的一套自我维护系统</div>
+        </div>
+      </div>
+
+      <div class="branch" id="s4-1">
+        <h3>4.1　健康心理学 / 心身医学</h3>
+        <div class="essence">
+          <b>核心本质：</b>心理压力如何变成躯体症状。核心机制是<b>应激反应（HPA 轴）</b>与<b>躯体化</b>—— 相当于「心理压力过载导致的硬件报错」。
+        </div>
+
+        <div class="theory">
+          <div class="t-name">HPA 轴与慢性应激</div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>压力触发下丘脑–垂体–肾上腺轴，释放皮质醇，让身体进入「战或逃」。急性压力是好事（提神），慢性压力是坏事（持续高皮质醇损伤睡眠、免疫、心血管与情绪调节）。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>转型期的问题不是「有压力」，而是<b>压力没有明确的结束点</b>。急性压力有终点，慢性压力没有，身体就一直挂在战斗状态。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>给身体制造「明确的结束信号」：固定作息、每天一次让心率下降的活动（慢跑、骑行、拉伸）、刻意安排不产生产出的时间。身体需要知道「危险过去了」。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">躯体化 <span class="t-en">Somatization</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>心理压力未被识别时，通过身体症状表达出来：紧绷、心悸、胃部不适、头痛、乏力。检查往往没有明确器质性病变。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>它不是「想出来的病」，症状是真实的，只是驱动源在心理层面。理解这一点本身就有治疗作用 —— 很多人因为「查不出问题」而更焦虑。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>两个原则：<b>（1）先排除器质性问题</b>，该做的检查要做，不要用心理学解释一切；<b>（2）建立「压力–症状」日志</b>，记录症状出现前 24 小时的压力事件、睡眠、咖啡因、情绪。两三周就能看见规律。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">压力–症状的恶性循环</div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>压力 → 身体紧绷/心悸 → 灾难化解读（「我是不是心脏有问题」）→ 更焦虑 → 症状加重。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>打断点在<b>解读</b>这一环：把「危险信号」重新标注为「压力反应」，配合延长呼气的呼吸（呼气长于吸气），通常 2–3 分钟内心率就会下来。循环一旦被打断一次，恐惧的强度就会下降。</span></div>
+          </div>
+        </div>
+
+        <div class="callout warn">
+          <b>必须说明：</b>心悸、胸痛、持续乏力等症状，<b>先就医排除器质性问题</b>。心理学的解释在排除之后才成立，不能反过来用。
+        </div>
+      </div>
+
+      <div class="branch" id="s4-2">
+        <h3>4.2　认知行为疗法（CBT）</h3>
+        <div class="essence">
+          <b>核心本质：</b>情绪不是由事件直接决定的，而是由你对事件的<b>解释</b>决定的。改变解释，就改变了情绪。相当于给思维做 debug —— CBT 是循证证据最强的心理治疗方法之一，其自助版本同样有效。
+        </div>
+
+        <div class="theory">
+          <div class="t-name">认知模型（ABC）</div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>A（事件）→ B（信念/解释）→ C（情绪与行为）。人以为是 A 导致 C，实际是 B 在中间起作用。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>情绪上来时，先把它拆成三格写下来：发生了什么（只写事实）、我当时脑子里说了什么（原话）、我因此做了什么。多数时候你会发现，同一件事换个解释，情绪完全不同。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">十种常见认知扭曲</div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>思维里的「固定 bug 模式」。识别名字，就能在它出现时按下暂停。</span></div>
+          </div>
+          <table>
+            <thead><tr><th>扭曲</th><th>典型句式</th><th>拆解问句</th></tr></thead>
+            <tbody>
+              <tr><td>全或无</td><td>「没做到最好就是失败」</td><td>60 分和 0 分真的一样吗？</td></tr>
+              <tr><td>灾难化</td><td>「这次搞砸，全完了」</td><td>最坏情况发生的概率？真发生了我能怎么应对？</td></tr>
+              <tr><td>以偏概全</td><td>「我总是这样」</td><td>有没有反例？「总是」有几次？</td></tr>
+              <tr><td>读心术</td><td>「他一定觉得我不行」</td><td>还有别的解释吗？我凭什么确定？</td></tr>
+              <tr><td>应该陈述</td><td>「我必须马上掌握全部」</td><td>这个「必须」是谁定的？做不到会怎样？</td></tr>
+              <tr><td>贴标签</td><td>「我就是个失败者」</td><td>这是一次行为，还是一种身份？</td></tr>
+              <tr><td>情绪推理</td><td>「我很焦虑，说明真的有问题」</td><td>焦虑能证明事实吗？还是只证明我焦虑？</td></tr>
+              <tr><td>贬低积极</td><td>「那只是运气」</td><td>如果换成别人做到，我会怎么评价？</td></tr>
+              <tr><td>个人化</td><td>「都是我的错」</td><td>还有哪些因素在我控制之外？</td></tr>
+              <tr><td>心理过滤</td><td>只盯着那一个负面细节</td><td>同一件事里，还有哪些信息被我筛掉了？</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">思维记录表（七栏）</div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>CBT 的核心自助工具，用结构化书写把「自动思维」变成「可检验的假设」。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>七栏：① 情境（何时何地何人）② 情绪（0–100 分）③ 自动思维（原话）④ 支持它的证据 ⑤ 反对它的证据 ⑥ 更平衡的想法 ⑦ 情绪再评分。每周 2–3 次，坚持三周，效果比「想开点」强得多。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">行为实验</div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>把「我以为」变成「我去试」。CBT 认为，改变信念最有效的方式不是辩论，而是用现实结果反驳它。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>信念是「我不懂投研，开口就会露怯」→ 实验是「这周约一个人聊 20 分钟，记录对方反应」。结果往往比想象温和。每次实验都在削弱旧信念的证据基础。</span></div>
+          </div>
+        </div>
+
+        <div class="callout warn">
+          <b>边界提醒：</b>CBT 自助适用于轻中度情绪困扰。若出现持续两周以上的情绪低落、明显失眠、兴趣丧失，或出现伤害自己的念头，<b>请寻求专业心理/精神科帮助</b>。自助工具不能替代专业治疗。
+        </div>
+      </div>
+
+      <div class="branch" id="s4-3">
+        <h3>4.3　认知心理学（专注力与学习）</h3>
+        <div class="essence">
+          <b>核心本质：</b>注意力、记忆、学习的底层规律。学习效率低，多数时候不是不努力，而是<b>输入方式违背了大脑的带宽限制</b>。
+        </div>
+
+        <div class="theory">
+          <div class="t-name">工作记忆容量 <span class="t-en">Working Memory · Baddeley</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>工作记忆是思维的「当前操作台」，容量极小 —— 大约同时处理 <b>4 个左右的信息组块</b>（经典说法 7±2 是短时记忆，工作记忆更接近 4）。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>把「同时想很多事」改成「把事写出来」。外部化（纸、白板、清单）等于给大脑加内存。学新知识时，一次只处理一个概念，讲给别人听（费曼）来检验是否真的装进去了。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">认知负荷理论 <span class="t-en">Cognitive Load · Sweller</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>负荷分三种：<b>内在</b>（内容本身难）、<b>外在</b>（呈现方式差、界面乱、信息散）、<b>相关</b>（用于建立理解的努力）。只有外在负荷是可以也应该被砍掉的。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>学投研时，别一边看财报一边刷资讯。把「找资料」和「读资料」分成两个时间块 —— 切换本身就是巨大的外在负荷。笔记用固定模板，减少每次「怎么记」的决策成本。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">间隔重复 + 提取练习 <span class="t-en">Spacing &amp; Retrieval Practice</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>遗忘曲线表明记忆衰减极快；而<b>主动回忆</b>（合上书复述）比反复阅读的记忆效果高得多。间隔越合理，留存越久。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>把「读第 3 遍」换成「合上书，写下这一章讲了什么」。复习安排在第 1 天、第 3 天、第 7 天、第 21 天。这条对考证和高强度自学最有效。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">心流 <span class="t-en">Flow · Csikszentmihalyi</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>完全投入的状态，需要三个条件：<b>挑战与技能匹配</b>（略高于当前能力）、<b>目标明确</b>、<b>即时反馈</b>。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>太难 → 拆小；太易 → 加约束（限时、加难度）。深工作时段关掉通知（外部打断一次，平均需要十几分钟才能回到原状态）。</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="branch" id="s4-4">
+        <h3>4.4　压力与应对心理学</h3>
+        <div class="essence">
+          <b>核心本质：</b>压力不是「事情太多」，而是<b>资源与要求之间的失衡</b>。同一件事，对不同资源储备的人，压力完全不同。
+        </div>
+
+        <div class="theory">
+          <div class="t-name">资源保存理论 <span class="t-en">COR · Hobfoll</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>压力 = <b>资源损耗速度 &gt; 资源补充速度</b>。资源包括：时间、精力、注意力、金钱、社会支持、掌控感、自我效能。资源损失会引发「损失螺旋」——越缺越容易继续失去。</span></div>
+            <div class="row"><span class="tag why">为什么</span><span>它解释了一个反直觉的现象：忙不是最累的，<b>忙且感觉不到补充</b>才最累。硬扛之所以失效，是因为硬扛本身就在消耗资源。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>压力管理不是比耐力，是做两件事：<b>（1）减少无效损耗</b>——砍掉不产生价值的会议、信息流、人际消耗；<b>（2）主动补充资源</b>——睡眠、运动、社交支持、掌控感的小胜利。每周做一次「资源收支表」：这周我消耗了什么，补充了什么。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">压力的交互模型 <span class="t-en">Transactional Model · Lazarus</span></div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span>压力取决于两次评估：<b>初级评估</b>（这事对我有威胁吗）+ <b>次级评估</b>（我有没有资源应对）。同一件事，评估不同，压力反应完全不同。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>焦虑时问两句：「最坏会怎样」（把模糊威胁具体化）和「我手上有什么」（把资源清单化）。焦虑常常源于次级评估缺失——只觉得难，没数过自己有什么。</span></div>
+          </div>
+        </div>
+
+        <div class="theory">
+          <div class="t-name">应对方式：问题聚焦 vs 情绪聚焦</div>
+          <div class="t-body">
+            <div class="row"><span class="tag what">是什么</span><span><b>问题聚焦</b>：改变情境本身（谈判、拆解任务、寻求帮助）。<b>情绪聚焦</b>：改变对情境的感受（重新解释、放松、倾诉）。</span></div>
+            <div class="row"><span class="tag how">怎么用</span><span>先判断「这件事我能不能改变」：能改变 → 问题聚焦（做具体的事）；不能改变 → 情绪聚焦（调整解释与情绪）。<b>用错模式是最大的内耗来源</b>：对不可控的事使劲较劲，对可控的事只顾着难受。</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════ 速查 ══════════════════════════ -->
+    <section id="cheat">
+      <div class="sec-head">
+        <div class="sec-no">05</div>
+        <div>
+          <div class="sec-t">一页速查表</div>
+          <div class="sec-sub">按「当下最痛的点」直接挑工具，不用从头读</div>
+        </div>
+      </div>
+      <table class="cheat">
+        <thead><tr><th>当下症状</th><th>背后机制</th><th>调用工具</th><th>今天就做的一件事</th></tr></thead>
+        <tbody>
+          <tr><td>看项目越看越顺眼</td><td>确认偏误 + 锚定</td><td>行为金融学</td><td>写半页「如果我错了，最可能错在哪」</td></tr>
+          <tr><td>亏了不肯走，赚了想跑</td><td>损失厌恶 / 处置效应</td><td>行为金融学</td><td>把止损条件写成书面规则</td></tr>
+          <tr><td>团队没人说真话</td><td>心理安全感低 + 从众</td><td>组织行为学 / 社会心理学</td><td>会上先认一个自己的错</td></tr>
+          <tr><td>会议越开越乐观</td><td>群体极化</td><td>社会心理学</td><td>指定一个魔鬼代言人</td></tr>
+          <tr><td>技术骨干留不住</td><td>自主/胜任/关联缺失</td><td>自我决定理论</td><td>把一个「怎么做」的决定交出去</td></tr>
+          <tr><td>谈判总觉得被动</td><td>没有 BATNA / 被锚定</td><td>谈判心理学</td><td>写下谈不成时的最佳替代方案</td></tr>
+          <tr><td>孩子处处对着干</td><td>青春期同一性探索</td><td>发展心理学</td><td>把一句命令改成两个选择</td></tr>
+          <tr><td>孩子抵触康复训练</td><td>耗竭 + 无掌控感</td><td>健康心理学</td><td>让他自己排一次训练顺序</td></tr>
+          <tr><td>孩子说「我就是笨」</td><td>固定型思维</td><td>积极心理学</td><td>把表扬换到「过程/策略」上</td></tr>
+          <tr><td>心悸、胸闷、紧绷</td><td>慢性应激 / 躯体化</td><td>心身医学</td><td>先就医排除，再做 3 分钟长呼气</td></tr>
+          <tr><td>「我必须马上学会」</td><td>应该陈述 + 灾难化</td><td>CBT</td><td>填一张七栏思维记录表</td></tr>
+          <tr><td>学了很多记不住</td><td>缺提取练习</td><td>认知心理学</td><td>合上书复述一遍今天读的内容</td></tr>
+          <tr><td>累但停不下来</td><td>资源损耗 &gt; 补充</td><td>COR 理论</td><td>列本周「消耗 / 补充」两栏</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="howto">
+      <div class="sec-head">
+        <div class="sec-no">06</div>
+        <div>
+          <div class="sec-t">怎么用这份东西</div>
+          <div class="sec-sub">三条使用纪律，比读完所有理论更重要</div>
+        </div>
+      </div>
+
+      <ol>
+        <li><b>一次只装一个工具。</b>从速查表里挑一个最痛的点，用两周。两周后如果有效，留在流程里；无效，换一个。同时上五个，等于一个都没上。</li>
+        <li><b>把工具变成「动作」，不是「名词」。</b>「我今天用了确认偏误」没有意义；「我今天写了半页反方备忘录」才有意义。凡是不能落成一个动作的理论，先放着。</li>
+        <li><b>区分「理解」和「治疗」。</b>这些理论能帮你理解自己和他人，能降低内耗；但持续的情绪困扰、躯体症状、关系破裂，需要专业帮助。把心理学当工具，不要当护身符。</li>
+      </ol>
+
+      <blockquote>
+        <b>最后：</b>你列出的这四个场景，本质上是同一件事的四个切面 —— 都在考验「在不确定中做判断，在压力下保持功能」。
+        工具箱的意义不是让你变成一台更精确的机器，而是让你在判断失误时，知道那是哪个环节出了问题，然后<b>修它</b>，而不是怀疑自己。
+      </blockquote>
+
+      <div class="end">
+        本文为心理学知识整理与个人应用框架，不构成医疗、心理治疗或投资建议。<br>
+        涉及身心健康的部分，请以专业医生的诊断与治疗方案为准。<br>
+        理论框架参考：Kahneman &amp; Tversky（前景理论）、Kahneman（双系统）、Deci &amp; Ryan（自我决定）、Locke &amp; Latham（目标设置）、Edmondson（心理安全感）、Erikson（发展八阶段）、Dweck（成长型思维）、Seligman（PERMA）、Beck（CBT）、Baddeley（工作记忆）、Sweller（认知负荷）、Hobfoll（COR）、Lazarus（压力交互模型）。
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+(function(){
+  var bar = document.getElementById('progress');
+  var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  var targets = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+
+  function onScroll(){
+    var h = document.documentElement;
+    var p = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+    bar.style.width = Math.min(100, p) + '%';
+
+    var y = h.scrollTop + 120, cur = -1;
+    targets.forEach(function(t, i){
+      if (t && t.offsetTop <= y) cur = i;
+    });
+    links.forEach(function(a, i){ a.classList.toggle('on', i === cur); });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+</script>
+</body>
+</html>
